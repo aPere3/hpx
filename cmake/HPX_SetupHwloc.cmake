@@ -48,7 +48,7 @@ else()
         execute_process(
           COMMAND
             sh -c
-            "cd ${FETCHCONTENT_BASE_DIR}/hwloc-src && ./configure --prefix=${FETCHCONTENT_BASE_DIR}/hwloc-installed && make -j && make install"
+            "cd ${FETCHCONTENT_BASE_DIR}/hwloc-src && ./configure --prefix=${FETCHCONTENT_BASE_DIR}/hwloc-installed --enable-static --disable-shared LDFLAGS=\"-static\" && make -j LDFLAGS=-all-static && make install"
         )
         set(Hwloc_BUILD_INSTALLED
             TRUE
@@ -65,17 +65,11 @@ else()
         ${HWLOC_ROOT}/include
         CACHE INTERNAL ""
     )
-    if(APPLE)
-      set(Hwloc_LIBRARY
-          ${HWLOC_ROOT}/lib/libhwloc.dylib
-          CACHE INTERNAL ""
-      )
-    else()
-      set(Hwloc_LIBRARY
-          ${HWLOC_ROOT}/lib/libhwloc.so
-          CACHE INTERNAL ""
-      )
-    endif()
+
+    set(Hwloc_LIBRARY
+        ${HWLOC_ROOT}/lib/libhwloc.a
+        CACHE INTERNAL ""
+    )
 
   elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
 
